@@ -2,7 +2,6 @@ package com.example.testtools.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,8 +17,7 @@ import com.example.testtools.Utils.FileOperations;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
@@ -35,11 +33,6 @@ public class IP_Register extends Fragment {
     private TextView textView;
     private StringBuilder sb;
     private FileOperations fileOperations;
-
-    /*public static IP_Register newInstance(int index) {
-        IP_Register ip_register = new IP_Register();
-        return ip_register;
-    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

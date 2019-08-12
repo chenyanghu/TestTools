@@ -2,10 +2,8 @@
     <string name="app_name">Test Tools</string>
     <string name="start">Start</string>
     <string name="input_num_of_trans">Input # of trans</string>
-    <string name="title_activity_main2">Main2Activity</string>
     <string name="tab_stress_test">Stress Test</string>
     <string name="tab_IP_register">IP Register</string>
-    <string name="tab_text_3">Tab 3</string>
     <string name="search">Search</string>
     <string name="SN">SN</string>
 </resources>
