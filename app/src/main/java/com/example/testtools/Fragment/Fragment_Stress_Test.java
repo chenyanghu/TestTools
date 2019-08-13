@@ -27,15 +27,15 @@ import com.pax.poslink.poslink.POSLinkCreator;
 
 import java.util.Random;
 
-public class Stress_Test extends Fragment {
+public class Fragment_Stress_Test extends Fragment {
 
-    Button start;
-    EditText editText;
-    TextView textView;
-    PosLink posLink;
-    StringBuilder sb;
-    CardInformation[] cardInformation;
-    FileOperations fileOperations;
+    private Button start;
+    private EditText editText;
+    private TextView textView;
+    private PosLink posLink;
+    private StringBuilder sb;
+    private CardInformation[] cardInformation;
+    private FileOperations fileOperations;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,10 +117,13 @@ public class Stress_Test extends Fragment {
         Log.d("Using Card: ", String.valueOf(cardIndex));
 
         CommSetting comm_setting = buildConnection();
-        POSLinkAndroid.init(getActivity().getApplicationContext(), comm_setting);
+
+        //Fragment_CommSetting fragment_commSetting = new Fragment_CommSetting();
+
+        POSLinkAndroid.init(getActivity().getApplicationContext(), comm_setting);//fragment_commSetting.getCommSetting());
         posLink = new POSLinkCreator().createPoslink(getActivity().getApplicationContext());
         posLink.PaymentRequest = paymentRequest;
-        posLink.SetCommSetting(comm_setting);
+        posLink.SetCommSetting(comm_setting);//(fragment_commSetting.getCommSetting());
 
         ProcessTransResult processTransResult = posLink.ProcessTrans();
         PaymentResponse paymentResponse = posLink.PaymentResponse;

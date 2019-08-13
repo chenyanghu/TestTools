@@ -7,9 +7,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.testtools.Fragment.Fragment_CommSetting;
 import com.example.testtools.R;
-import com.example.testtools.Fragment.IP_Register;
-import com.example.testtools.Fragment.Stress_Test;
+import com.example.testtools.Fragment.Fragment_IP_Register;
+import com.example.testtools.Fragment.Fragment_Stress_Test;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -18,7 +19,7 @@ import com.example.testtools.Fragment.Stress_Test;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_stress_test, R.string.tab_IP_register};
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_stress_test, R.string.tab_IP_register,R.string.tab_CommSetting};
     private final Context mContext;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
@@ -32,11 +33,14 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // Return a PlaceholderFragment (defined as a static inner class below).
         switch (position){
             case 0:
-                Stress_Test stress_test = new Stress_Test();
+                Fragment_Stress_Test stress_test = new Fragment_Stress_Test();
                 return stress_test;
             case 1:
-                IP_Register ip_register = new IP_Register();
-                return ip_register;
+                Fragment_IP_Register fragmentIp_register = new Fragment_IP_Register();
+                return fragmentIp_register;
+            case 2:
+                Fragment_CommSetting commSetting = new Fragment_CommSetting();
+                return commSetting;
             default:
                 return null;
         }

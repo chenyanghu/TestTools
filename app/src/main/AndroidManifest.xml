@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".Activities.InputSN_Activity"></activity>
+        <activity android:name=".Activities.Activity_InputSN"></activity>
 
         <activity
             android:name=".Activities.MainActivity"

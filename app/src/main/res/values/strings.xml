@@ -4,6 +4,19 @@
     <string name="input_num_of_trans">Input # of trans</string>
     <string name="tab_stress_test">Stress Test</string>
     <string name="tab_IP_register">IP Register</string>
+    <string name="tab_CommSetting">CommSetting</string>
     <string name="search">Search</string>
     <string name="SN">SN</string>
+    <string name="submit">Submit</string>
+    <string name="commType">Comm Type</string>
+    <string name="timeout">Time Out</string>
+    <string name="serialport">Serial Port</string>
+    <string name="boudrate">Baud Rate</string>
+    <string name="destIP">Dest IP</string>
+    <string name="destport">Dest Port</string>
+    <string name="macaddr">Mac Addr</string>
+    <string name="defaultTimeout">-1</string>
+    <string name="defaultSerialPort">COM1</string>
+    <string name="defaultPort">10009</string>
+    <string name="save">Save</string>
 </resources>

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.testtools.Activities.InputSN_Activity;
+import com.example.testtools.Activities.Activity_InputSN;
 import com.example.testtools.R;
 import com.example.testtools.Utils.FileOperations;
 
@@ -24,7 +24,7 @@ import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class IP_Register extends Fragment {
+public class Fragment_IP_Register extends Fragment {
 
     private static final int SEARCH_CANCELLED = 0;
     private static final int SEARCH_SUCCESSFUL = 1;
@@ -50,7 +50,7 @@ public class IP_Register extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), InputSN_Activity.class);
+                Intent intent = new Intent(getActivity(), Activity_InputSN.class);
                 startActivityForResult(intent, GET_SN_REQUEST);
             }
         });

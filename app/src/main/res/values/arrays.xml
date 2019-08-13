@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="data">
+        <item>UART</item>
+        <item>TCP</item>
+        <item>BLUETOOTH</item>
+        <item>SSL</item>
+        <item>HTTP</item>
+        <item>HTTPS</item>
+        <item>USB</item>
+        <item>AIDL</item>
+    </string-array>
+</resources>

@@ -10,7 +10,7 @@ import android.widget.EditText;
 
 import com.example.testtools.R;
 
-public class InputSN_Activity extends AppCompatActivity {
+public class Activity_InputSN extends AppCompatActivity {
 
     private static final int SEARCH_CANCELLED = 0;
     private static final int SEARCH_SUCCESSFUL = 1;
