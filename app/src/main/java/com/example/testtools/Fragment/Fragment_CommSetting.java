@@ -1,5 +1,6 @@
 package com.example.testtools.Fragment;
-
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,12 +15,13 @@ import android.widget.TextView;
 import com.example.testtools.R;
 import com.pax.poslink.CommSetting;
 
+import java.util.HashMap;
+
 
 public class Fragment_CommSetting extends Fragment {
 
     private Spinner spinner_commType;
     private Button saveButton;
-
     private TextView textView_SerialPort;
     private TextView textView_BaudRate;
     private TextView textView_DestIP;
@@ -31,12 +33,33 @@ public class Fragment_CommSetting extends Fragment {
     private EditText editText_DestIP;
     private EditText editText_DestPort;
     private EditText editText_MacAddr;
+    private CommSetting commSetting;
 
-    private CommSetting commSetting = new CommSetting();
+    private HashMap<String, Integer> commType;
+    private SharedPreferences savedCommSettings;
+    private SharedPreferences.Editor editor;
+
+    OnSavedCommSettingListener onSavedCommSettingListener;
+    public void setOnSavedCommSettingListener(OnSavedCommSettingListener onSavedCommSettingListener) {
+        this.onSavedCommSettingListener = onSavedCommSettingListener;
+    }
+    // Interface: Transfer commSetting to Host Activity
+    public interface OnSavedCommSettingListener {
+        void onSavedCommSetting(CommSetting commSetting);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        commType = new HashMap<>();
+        commType.put("UART", 0);
+        commType.put("TCP", 1);
+        commType.put("BLUETOOTH", 2);
+        commType.put("SSL", 3);
+        commType.put("HTTP", 4);
+        commType.put("HTTPS", 5);
+        commType.put("USB", 6);
+        commType.put("AIDL", 7);
     }
 
     @Override
@@ -56,9 +79,29 @@ public class Fragment_CommSetting extends Fragment {
         editText_DestIP = rootView.findViewById(R.id.editText_DestIP);
         editText_DestPort = rootView.findViewById(R.id.editText_DestPort);
         editText_MacAddr = rootView.findViewById(R.id.editText_MacAddr);
-
         spinner_commType = rootView.findViewById(R.id.spinner_CommType);
-        spinner_commType.setSelection(7);
+
+        try{
+            savedCommSettings = getActivity().getSharedPreferences("CommSettings", Context.MODE_PRIVATE);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        editor = savedCommSettings.edit();
+
+        if(!savedCommSettings.contains("CommType")){
+            editor.putString("CommType", "AIDL");
+            editor.putString("TimeOut", "-1");
+            editor.putString("DestIP", "");
+            editor.putString("DestPort", "");
+            editor.putString("MacAddr", "");
+            editor.apply();
+        }
+        initializeCommSetting(savedCommSettings);
+        setCommSetting();
+        //default selection: AIDL(position 7)
+        //spinner_commType.setSelection(7);
         spinner_commType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -105,7 +148,9 @@ public class Fragment_CommSetting extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                saveCommSettings();
+                setCommSetting();
+                onSavedCommSettingListener.onSavedCommSetting(commSetting);
             }
         });
         return rootView;
@@ -128,28 +173,28 @@ public class Fragment_CommSetting extends Fragment {
         commSetting = new CommSetting();
         switch (spinner_commType.getSelectedItem().toString()){
             case "UART":
-                commSetting.CommType = CommSetting.UART;
+                commSetting.setType(CommSetting.UART);
                 break;
             case "TCP":
-                commSetting.CommType = CommSetting.TCP;
+                commSetting.setType(CommSetting.TCP);
                 break;
             case "BLUETOOTH":
-                commSetting.CommType = CommSetting.BT;
+                commSetting.setType(CommSetting.BT);
                 break;
             case "SSL":
-                commSetting.CommType = CommSetting.SSL;
+                commSetting.setType(CommSetting.SSL);
                 break;
             case "HTTP":
-                commSetting.CommType = CommSetting.HTTP;
+                commSetting.setType(CommSetting.HTTP);
                 break;
             case "HTTPS":
-                commSetting.CommType = CommSetting.HTTPS;
+                commSetting.setType(CommSetting.HTTPS);
                 break;
             case "USB":
-                commSetting.CommType = CommSetting.USB;
+                commSetting.setType(CommSetting.USB);
                 break;
             case "AIDL":
-                commSetting.CommType = CommSetting.AIDL;
+                commSetting.setType(CommSetting.AIDL);
                 break;
             default:
                 break;
@@ -159,5 +204,25 @@ public class Fragment_CommSetting extends Fragment {
         commSetting.DestIP = editText_DestIP.getText().toString();
         commSetting.DestPort = editText_DestPort.getText().toString();
         commSetting.MacAddr = editText_MacAddr.getText().toString();
+    }
+
+    private void initializeCommSetting(SharedPreferences savedCommSettings){
+        int test = commType.get(savedCommSettings.getString("CommType", null));
+        spinner_commType.setSelection(test);
+        editText_Timeout.setText(savedCommSettings.getString("SerialPort", null));
+        editText_Timeout.setText(savedCommSettings.getString("TimeOut",null));
+        editText_DestIP.setText(savedCommSettings.getString("DestIP", null));
+        editText_DestPort.setText(savedCommSettings.getString("DestPort", null));
+        editText_MacAddr.setText(savedCommSettings.getString("MacAddr", null));
+        setCommSetting();
+    }
+
+    private void saveCommSettings(){
+        editor.putString("CommType", spinner_commType.getSelectedItem().toString());
+        editor.putString("TimeOut", editText_Timeout.getText().toString());
+        editor.putString("DestIP", editText_DestIP.getText().toString());
+        editor.putString("DestPort", editText_DestPort.getText().toString());
+        editor.putString("MacAddr", editText_MacAddr.getText().toString());
+        editor.apply();
     }
 }

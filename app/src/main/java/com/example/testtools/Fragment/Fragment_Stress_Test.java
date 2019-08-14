@@ -36,13 +36,18 @@ public class Fragment_Stress_Test extends Fragment {
     private StringBuilder sb;
     private CardInformation[] cardInformation;
     private FileOperations fileOperations;
+    private CommSetting comm_setting;
+
+    // Receive commSetting from MainActivity
+    public interface GetCommSetting{
+        CommSetting getCommSetting();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -116,27 +121,39 @@ public class Fragment_Stress_Test extends Fragment {
         paymentRequest.ExtData = String.format("<Account>%s</Account><ExpDate>%s</ExpDate><CPMode>1</CPMode>",cardInformation[cardIndex].cardNo, cardInformation[cardIndex].expDate);
         Log.d("Using Card: ", String.valueOf(cardIndex));
 
-        CommSetting comm_setting = buildConnection();
-
-        //Fragment_CommSetting fragment_commSetting = new Fragment_CommSetting();
+        if(getActivity() instanceof GetCommSetting){
+            comm_setting = ((GetCommSetting) getActivity()).getCommSetting();
+        }
 
         POSLinkAndroid.init(getActivity().getApplicationContext(), comm_setting);//fragment_commSetting.getCommSetting());
         posLink = new POSLinkCreator().createPoslink(getActivity().getApplicationContext());
         posLink.PaymentRequest = paymentRequest;
         posLink.SetCommSetting(comm_setting);//(fragment_commSetting.getCommSetting());
 
-        ProcessTransResult processTransResult = posLink.ProcessTrans();
-        PaymentResponse paymentResponse = posLink.PaymentResponse;
+        try{
+            ProcessTransResult processTransResult = posLink.ProcessTrans();
+            PaymentResponse paymentResponse = posLink.PaymentResponse;
 
-        if(paymentResponse == null){
-            sb.append("No transaction is running");
-            return "";
+            if(paymentResponse == null){
+                sb.append("No transaction is running");
+                return "";
+            }
+            sb = new StringBuilder();
+            String res = String.format("Result:\n  Transaction number: %d\n  ProcessTransResult Code: %s\n  ProcessTransResult Msg: %s\n  Result Code: %s\n  Result Text: %s\n  HostResCode: %s\n  HostResMsg: %s\n  HostResNum: %s\n  Message: %s\n  Approved Amount: %s\n", i, processTransResult.Code, processTransResult.Msg, paymentResponse.ResultCode, paymentResponse.ResultTxt, paymentResponse.HostCode, paymentResponse.HostResponse, paymentResponse.AuthCode, paymentResponse.Message, paymentResponse.ApprovedAmount);
+            sb.append(res);
+            return String.valueOf(paymentResponse.ResultCode);
+
+        }catch (Exception e){
+            /*getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    textView.setText("Error Occurred");
+                }
+            });*/
+            sb = new StringBuilder();
+            sb.append("Error Occurred");
         }
-        sb = new StringBuilder();
-        String res = String.format("Result:\n  Transaction number: %d\n  ProcessTransResult Code: %s\n  ProcessTransResult Msg: %s\n  Result Code: %s\n  Result Text: %s\n  HostResCode: %s\n  HostResMsg: %s\n  HostResNum: %s\n  Message: %s\n  Approved Amount: %s\n", i, processTransResult.Code, processTransResult.Msg, paymentResponse.ResultCode, paymentResponse.ResultTxt, paymentResponse.HostCode, paymentResponse.HostResponse, paymentResponse.AuthCode, paymentResponse.Message, paymentResponse.ApprovedAmount);
-        Log.d("PaymentResult: ",res);
-        sb.append(res);
-        return String.valueOf(paymentResponse.ResultCode);
+        return "";
     }
 
     private CommSetting buildConnection(){
